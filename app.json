@@ -1,5 +1,5 @@
 {
-    "name": "Swift Kitura Line Messaging Echo Bot",
+    "name": "Kitura Line Messaing Echo Bot",
     "description": "A Echo bot with Line Messaging API & Kitura",
     "repository": "https://github.com/macfeteria/swift-line-echobot-demo",
     "env": {
