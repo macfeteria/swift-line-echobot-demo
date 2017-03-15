@@ -1,0 +1,16 @@
+{
+    "name": "Swift Kitura Line Messaging Echo Bot",
+    "description": "A Echo bot with Line Messaging API & Kitura",
+    "repository": "https://github.com/macfeteria/swift-line-echobot-demo",
+    "env": {
+        "CHANNEL_ACC_TOKEN": {
+            "description": "Line Channel Access Token",
+            "value": "XXXXX"
+        }
+    },
+    "buildpacks": [
+        {
+            "url": " https://github.com/kylef/heroku-buildpack-swift"
+        }
+    ]
+}
