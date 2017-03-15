@@ -6,11 +6,15 @@
         "CHANNEL_ACC_TOKEN": {
             "description": "Line Channel Access Token",
             "value": "XXXXX"
+        },
+        "CHANNEL_SECRET_KEY": {
+            "description": "Line Channel Secret",
+            "value": "XXXXX"
         }
     },
     "buildpacks": [
         {
-            "url": " https://github.com/kylef/heroku-buildpack-swift.git"
+            "url": "https://github.com/kylef/heroku-buildpack-swift"
         }
     ]
 }

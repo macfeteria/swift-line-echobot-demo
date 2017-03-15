@@ -24,9 +24,6 @@ router.get("/") { request, response, next in
 }
 
 router.post("/") { request, response, next in
-    for item in request.headers {
-        print(item)
-    }
     
     guard let parsedBody = request.body else {
         next()
@@ -38,21 +35,36 @@ router.post("/") { request, response, next in
         next()
         return
     }
+
+    guard let lineSignature = request.headers["X-Line-Signature"] else {
+        try response.send(status: HTTPStatusCode.forbidden).end()
+        return
+    }
+
+    // Validate Line Signature
+    guard let rawMessage = jsonBody.rawString(), (validateSignature(message: rawMessage, signature: lineSignature, secretKey: env.secretKey) == false)
+    else {
+        try response.send(status: HTTPStatusCode.forbidden).end()
+        return
+    }
     
     let _ = response.send(status: HTTPStatusCode.OK)
+
+    // Process Data from Line Webhook
     let lineData = textFromLineWebhook(json: jsonBody)
     
+    // Add authorization to reply header
     let lineheader:[String: String] =  ["Authorization": "Bearer {\(env.channelAccessToken)}"]
     
+    // Create reply message wit reply token
     let replyDict = reply(text: lineData.text, token: lineData.replyToken)
     
+    // Send back to Line Reply API
     KituraRequest.request(.post, replyAPI, parameters:replyDict , encoding: JSONEncoding.default, headers: lineheader).response {
         request, response, data, error in
         
         let message = String(data: data!, encoding: String.Encoding.utf8)
         print("Line response \n \(message)\n\n")
-        
-        // do something with data
     }
     next()
 }

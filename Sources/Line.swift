@@ -7,7 +7,23 @@
 //
 
 import Foundation
+import Cryptor
 import SwiftyJSON
+
+public func validateSignature( message: String, signature: String , secretKey: String) -> Bool {
+    let key = CryptoUtils.byteArray(from: secretKey)
+    let data : [UInt8] = CryptoUtils.byteArray(from: message)
+    if let hmac = HMAC(using: HMAC.Algorithm.sha256, key: key).update(byteArray: data)?.final() {
+        let hmacData = Data(hmac)
+        let hmacHex = hmacData.base64EncodedString(options: .endLineWithLineFeed)
+        if signature == hmacHex {
+            return true
+        } else {
+            return false
+        }
+    }
+    return false
+}
 
 public func textFromLineWebhook(json: JSON) -> (text:String,replyToken:String) {
     
